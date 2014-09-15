@@ -4,7 +4,10 @@
 # SARCAN
 #
 ###########################################
-import urllib2
+try:
+    import urllib.request as urllib2
+except:
+    import urllib2
 import requests
 try:
     import json
@@ -40,7 +43,7 @@ with open(basepath + f_fname, "w") as outfile:
 
 for f_item in f_data["Items"]:
 	FederationId = f_item["FederationId"]
-	print FederationId
+	print (FederationId)
 	# Create federation folder
 	federation_path = basepath + FederationId
 	if not os.path.exists(federation_path):
@@ -53,7 +56,7 @@ for f_item in f_data["Items"]:
 	
 	for page in range(1, int(dp_data["TotalPages"])):
 
-		print "iterating page " + str(page)
+		print ("iterating page " + str(page))
 		# Iterate over documents of a federation
 		documents_resource = "http://gosocketapi2.azurewebsites.net/api/App/GetSentDocuments?CountryId=cl&FederationId="+FederationId+"&AccountId=" + AccountId + "&Page=" + str(page)
 		dr = requests.get(documents_resource, auth=(user, password))
@@ -66,7 +69,7 @@ for f_item in f_data["Items"]:
 
 		for d_item in d_data["Items"]:
 			DocumentId = d_item["DocumentId"]
-			print " > " + DocumentId
+			print (" > " + DocumentId)
 
 			# Create document folder
 			document_path = federation_path + "/" + DocumentId
@@ -86,10 +89,11 @@ for f_item in f_data["Items"]:
 			url = "http://api.gosocket.net/api/App/GetXml?CountryId=cl&DocumentId=b258b4b1-52ff-43dd-8a7c-0e023852b0f8"
 
 			xml_r = requests.get(url, auth=(user, password))
-			# print r.text
+		    
 			xml_data = xml_r.text
-			xml_fname = "xml_" + DocumentId + ".xml"	
+			xml_test = str(b64decode(xml_data).decode())
+			xml_fname = "xml_" + DocumentId + ".xml"
 
 			xml_file = open(document_path + "/" + xml_fname, "w")
-			xml_file.write(b64decode(xml_data))
+			xml_file.write(xml_test)
 			xml_file.close()
