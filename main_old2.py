@@ -15,9 +15,6 @@ except ImportError:
     import simplejson as json
 import os
 from base64 import *
-import sys
-import codecs
-#sys.stdout = codecs.getwriter("iso-8859-1")(sys.stdout, 'xmlcharrefreplace')
 
 def getRows(data):
     # ?? this totally depends on what's in your data
@@ -66,10 +63,6 @@ for f_item in f_data["Items"]:
 		startingpage = 1
 
 	for page in range(startingpage, int(dp_data["TotalPages"])):
-		# Create page folder
-		page_path = federation_path + "/p" + str(page) 
-		if not os.path.exists(page_path):
-			os.makedirs(page_path)
 
 		print ("iterating page " + str(page))
 		# Iterate over documents of a federation
@@ -82,39 +75,36 @@ for f_item in f_data["Items"]:
 		with open(federation_path + "/" + d_fname, "w") as outfile:
 			json.dump(d_data, outfile)
 
-		for d_item in d_data["Items"]:
-			DocumentId = d_item["DocumentId"]
-			print (" > " + DocumentId)
+		# for d_item in d_data["Items"]:
+		# 	DocumentId = d_item["DocumentId"]
+		# 	print (" > " + DocumentId)
 
-			# Create document folder
-			document_path = page_path + "/" + DocumentId
-			if not os.path.exists(document_path):
-				os.makedirs(document_path)
+		# 	# Create document folder
+		# 	document_path = federation_path + "/" + DocumentId
+		# 	if not os.path.exists(document_path):
+		# 		os.makedirs(document_path)
 
-			# Iterate over details of a document
-			documentDetail_resource = "http://gosocketapi2.azurewebsites.net/api/App/GetDocumentDetail?CountryId=cl&DocumentId=" + DocumentId
-			dDr = requests.get(documentDetail_resource, auth=(user, password))
-			dD_data = dDr.json()
-			# Copy document detail JSON
-			dD_fname = "documentDetail_" + DocumentId + ".json"	
-			with open(document_path + "/" + dD_fname, "w") as outfile:
-				json.dump(dD_data, outfile)
-			
-				# Copy document detail XML
-			url = "http://api.gosocket.net/api/App/GetXml?CountryId=cl&DocumentId=" + DocumentId
+		# 	# Iterate over details of a document
+		# 	documentDetail_resource = "http://gosocketapi2.azurewebsites.net/api/App/GetDocumentDetail?CountryId=cl&DocumentId=" + DocumentId
+		# 	dDr = requests.get(documentDetail_resource, auth=(user, password))
+		# 	dD_data = dDr.json()
+		# 	# Copy document detail JSON
+		# 	dD_fname = "documentDetail_" + DocumentId + ".json"	
+		# 	with open(document_path + "/" + dD_fname, "w") as outfile:
+		# 		json.dump(dD_data, outfile)
 
-			xml_r = requests.get(url, auth=(user, password))
+		# 	# Copy document detail XML
+		# 	url = "http://api.gosocket.net/api/App/GetXml?CountryId=cl&DocumentId=b258b4b1-52ff-43dd-8a7c-0e023852b0f8"
+
+		# 	xml_r = requests.get(url, auth=(user, password))
 		    
-			xml_data = xml_r.text
-			#print(" > > " + xml_r.encoding)
-			#xml_test = str(b64decode(xml_data).decode())
-			xml_test = str(b64decode(xml_data).decode('ISO-8859-1', 'xmlcharrefreplace'))
-			#xml_test = str(b64decode(xml_data).decode())
-			xml_fname = "xml_" + DocumentId + ".xml"
-			#print(xml_test)
-			xml_file = open(document_path + "/" + xml_fname, "w")
-			xml_file.write(xml_test)
-			xml_file.close()
+		# 	xml_data = xml_r.text
+		# 	xml_test = str(b64decode(xml_data).decode())
+		# 	xml_fname = "xml_" + DocumentId + ".xml"
+
+		# 	xml_file = open(document_path + "/" + xml_fname, "w")
+		# 	xml_file.write(xml_test)
+		# 	xml_file.close()
 		f2 = open("gosocket_downloads/" + FederationId + "/lastpage", "w")
 		f2.write(str(page))
 		f2.close
