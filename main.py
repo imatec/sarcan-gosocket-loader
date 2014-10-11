@@ -106,10 +106,11 @@ for f_item in f_data["Items"]:
 			xml_r = requests.get(url, auth=(user, password))
 		    
 			xml_data = xml_r.text
-			#xml_test = str(b64decode(xml_data).decode())
+
 			xml_test = b64decode(xml_data)
 			xml_fname = "xml_" + DocumentId + ".xml"
 			xml_file = open(document_path + "/" + xml_fname, "wb")
+
 			xml_file.write(xml_test)
 			xml_file.close()
 		f2 = open("gosocket_downloads/" + FederationId + "/lastpage", "w")
