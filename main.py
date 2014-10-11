@@ -100,19 +100,16 @@ for f_item in f_data["Items"]:
 			with open(document_path + "/" + dD_fname, "w") as outfile:
 				json.dump(dD_data, outfile)
 			
-				# Copy document detail XML
+			# Copy document detail XML
 			url = "http://api.gosocket.net/api/App/GetXml?CountryId=cl&DocumentId=" + DocumentId
 
 			xml_r = requests.get(url, auth=(user, password))
 		    
 			xml_data = xml_r.text
-			#print(" > > " + xml_r.encoding)
 			#xml_test = str(b64decode(xml_data).decode())
-			xml_test = str(b64decode(xml_data).decode('ISO-8859-1', 'xmlcharrefreplace'))
-			#xml_test = str(b64decode(xml_data).decode())
+			xml_test = b64decode(xml_data)
 			xml_fname = "xml_" + DocumentId + ".xml"
-			#print(xml_test)
-			xml_file = open(document_path + "/" + xml_fname, "w")
+			xml_file = open(document_path + "/" + xml_fname, "wb")
 			xml_file.write(xml_test)
 			xml_file.close()
 		f2 = open("gosocket_downloads/" + FederationId + "/lastpage", "w")
