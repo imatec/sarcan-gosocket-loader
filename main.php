@@ -102,7 +102,7 @@ foreach ($federations->Items as $federation) {
 			// copy detail XML
 			$detailXML = getDetailXML($documentId);
 			$detailXML = base64_decode($detailXML);
-			file_put_contents("{$documentPath}/xml_{$documentId}.xml", json_encode($detailXML));
+			file_put_contents("{$documentPath}/xml_{$documentId}.xml", $detailXML);
 		}
 		writeStartPage($lastPageFileName, $pageNum);
 	}
