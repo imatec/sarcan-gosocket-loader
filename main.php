@@ -33,7 +33,7 @@ function createPath($path) {
 function readStartPage($file) {
 	$startPage = 1;
 	if (file_exists($file) && $fh = fopen($file, "r")) {
-		while (($line = fgets($handle)) !== false) {
+		while (($line = fgets($fh)) !== false) {
 			$startPage = (int)$line;
 		}
 	}
